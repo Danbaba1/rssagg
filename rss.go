@@ -29,7 +29,13 @@ func urlToFeed(url string) (RSSFeed, error) {
 		Timeout: 10 * time.Second,
 	}
 
-	resp, err := httpClient.Get(url)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return RSSFeed{}, err
+	}
+	req.Header.Set("User-Agent", "rssagg/1.0")
+
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return RSSFeed{}, err
 	}
